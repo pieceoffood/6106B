@@ -5,10 +5,8 @@
 //#define DEBUG
 void resetEncoders()
 {
-	SensorValue[en_front_left] = 0;
-	SensorValue[en_front_right] = 0;
-	SensorValue[en_back_left] = 0;
-	SensorValue[en_back_right] = 0;
+	SensorValue[en_left_base] = 0;
+	SensorValue[en_right_base] = 0;
 }
 
 int gyroTarget = 0;
@@ -83,8 +81,8 @@ previousReading[ii];
 */
 task tMoveWheels()
 { //distance in inches
-#define currLocLeft (SensorValue[en_front_left]+SensorValue[en_back_left])/2
-#define currLocRight (-SensorValue[en_front_right]+SensorValue[en_back_right])/2
+#define currLocLeft (SensorValue[en_left_base])
+#define currLocRight (-SensorValue[en_right_base])
 	int lastMeasure=nSysTime;
 	const float distance = wheelsTarget;
 	static const float ticksPerInches = 360 / (PI * 4);
@@ -159,7 +157,7 @@ task tMoveMobileGoal()
 
 	for(ever)
 	{
-		err = mobileGoalTarget - SensorValue[pot_mb];
+		err = mobileGoalTarget - SensorValue[pot_mg];
 		powerOutput = err * kp + // Proportional
 		allErr * ki + (lastErr - err) * kd;
 		lastErr = err;
@@ -191,13 +189,13 @@ const bool shouldResetGyroscope = true)
 
 
 	while (not(
-		approxEq(currLocLeft * EN_FRONT_LEFT_DIRECTION, distance * ticksPerInches, tolerance * ticksPerInches) and
-	approxEq(currLocRight * EN_FRONT_RIGHT_DIRECTION, distance * ticksPerInches,
+		approxEq(currLocLeft * EN_LEFT_DIRECTION, distance * ticksPerInches, tolerance * ticksPerInches) and
+	approxEq(currLocRight * EN_RIGHT_DIRECTION, distance * ticksPerInches,
 	tolerance * ticksPerInches))) {} //blocks when target not reached
 	#ifdef DEBUG
 	for (int ii=0;ii<100;ii++){
 		writeDebugStreamLine("!!!!!!!!Target %d reached at %d.", wheelsTarget,nSysTime);
-		writeDebugStreamLine("!!!!!!!!Current reading: L: %d | R: %d",currLocLeft * EN_FRONT_LEFT_DIRECTION, currLocRight * EN_FRONT_RIGHT_DIRECTION);
+		writeDebugStreamLine("!!!!!!!!Current reading: L: %d | R: %d",currLocLeft * EN_LEFT_DIRECTION, currLocRight * EN_RIGHT_DIRECTION);
 	}
 #endif
 	return;
@@ -209,7 +207,7 @@ const bool shouldResetGyroscope = true)
 #undef currLocLeft
 #undef currLocRight
 
-void turn(const int degrees, int tolerance = 10) //positive number for turning clockwise
+void turn(const int degrees, int tolerance = 10) //positive numger for turning clockwise
 {
 	resetGyro();
 	if (degrees > 360 or degrees < -360) return; // Cannot throw an exception in robotC. Just return
@@ -232,30 +230,30 @@ void mobileGoal(const int target, bool block = false, int tolerance = 30, int de
 	startTask(tMoveMobileGoal);
 	if (block)
 	{
-		while (not approxEq(target, SensorValue[pot_mb], tolerance)) {} //blocks when target not reached
+		while (not approxEq(target, SensorValue[pot_mg], tolerance)) {} //blocks when target not reached
 
 	}
 
 }
 
-void mb_in(bool block, int delay=0){
+void mg_in(bool block, int delay=0){
 	mobileGoal(900,block,60,delay);
 }
 
-void mb_mid(bool block, int delay=0){
+void mg_mid(bool block, int delay=0){
 	mobileGoal(2000,block,60,delay);
 }
 
-void mb_out(bool block, int delay=0){
+void mg_out(bool block, int delay=0){
 	mobileGoal(3300,block,80,delay);
 }
-
+/*
 void outOfSize(int fourBar, int chainBar){
 	holdFourBar(fourBar);
 	while (SensorValue[pot_chainbar] > 3600){
 		chainBarMove(-120);
 	}
 	holdChainBar(chainBar);
-}
+}*/
 
 #endif

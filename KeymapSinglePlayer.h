@@ -4,8 +4,8 @@
 #define ButtonMobileGoalUp vexRT[Btn5U]
 #define ButtonMobileGoalDown vexRT[Btn5D]
 
-#define ButtonFourbarUp vexRT[Btn6U]
-#define ButtonFourbarDown vexRT[Btn6D]
+#define ButtonLiftUp vexRT[Btn6U]
+#define ButtonLiftDown vexRT[Btn6D]
 
 #define ButtonChainBarUp vexRT[Btn7U]
 #define ButtonChainBarDown vexRT[Btn7L]

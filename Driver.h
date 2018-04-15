@@ -4,40 +4,42 @@
 
 
 // -----------------BEGIN Global Constants Configuration-------------------
-const int MB_POWER = 127; // power to mobile goal lift
-const int FOURBAR_POWER = 90; //power to fourbar
-const int CHAINBAR_POWER = 100; // power to chainbar
+const int MG_POWER = 127; // power to mobile goal lift
+const int LIFT_POWER = 127; //power to lift
+const int FOURBAR_POWER = 127; // power to fourbar
 const int ROLLER_POWER = 100; // power to roller
-const int FOURBAR_ANTIGRAVITY = 10; //power to fourbar when it is in the "stop" position
-const int MB_ANTIGRAVITY = 0; //power to mobile goal lift when it is in the "stop" position
-const int CHAINBAR_ANTIGRAVITY = 20;
+const int LIFT_ANTIGRAVITY = 10; //power to lift when it is in the "stop" position
+const int MG_ANTIGRAVITY = 0; //power to mobile goal lift when it is in the "stop" position
+const int FOURBAR_ANTIGRAVITY = 0;
 const int ROLLER_ANTIGRAVITY = 25;
 
-//POT_MIN is the value when the fourbar is physically at its physical lowest location. MIN may be larger than MAX in value.
+//POT_MIN is the value when the lift is physically at its physical lowest location. MIN may be larger than MAX in value.
 //POT_DIRECTION can be either -1 or 1. 1 if the potentiometer reading increase when the structure moves up, -1 otherwise
-const int POT_CHAINBAR_MIN = 1200; 
-const int POT_CHAINBAR_MAX = 4095;
-const int POT_CHAINBAR_DIRECTION=1;
+const int POT_FOURBAR_LEFT_MIN = 1200; 
+const int POT_FOURBAR_LEFT_MAX = 4095;
+const int POT_FOURBAR_LEFT_DIRECTION=1;
+
+const int POT_FOURBAR_RIGHT_MIN = 1200; 
+const int POT_FOURBAR_RIGHT_MAX = 4095;
+const int POT_FOURBAR_RIGHT_DIRECTION=1;
+
+const int POT_LIFT_LEFT_DIRECTION = 1;
+const int POT_LIFT_LEFT_MAX = 3882;
+const int POT_LIFT_LEFT_MIN = 2150;
+
+const int POT_LIFT_RIGHT_DIRECTION = 1; 
+const int POT_LIFT_RIGHT_MAX = 3703;
+const int POT_LIFT_RIGHT_MIN = 2060;
+
+const int MG_MIN = 883;
+const int MG_MAX = 3260;
+
+const int RIGHT_DIRECTION = 1;
+const int LEFT_DIRECTION = 1;
 
 
-const int POT_FOURBAR_LEFT_DIRECTION = 1;
-const int POT_FOURBAR_LEFT_MAX = 3882;
-const int POT_FOURBAR_LEFT_MIN = 2150;
-
-const int POT_FOURBAR_RIGHT_DIRECTION = 1; 
-const int POT_FOURBAR_RIGHT_MAX = 3703;
-const int POT_FOURBAR_RIGHT_MIN = 2060;
-
-const int MB_MIN = 883;
-const int MB_MAX = 3260;
-
-const int FRONT_LEFT_DIRECTION = 1;
-const int FRONT_RIGHT_DIRECTION = 1;
-const int BACK_LEFT_DIRECTION = 1;
-const int BACK_RIGHT_DIRECTION = 1;
-
-const int EN_FRONT_LEFT_DIRECTION = -1;
-const int EN_FRONT_RIGHT_DIRECTION = -1;
+const int EN_LEFT_DIRECTION = -1;
+const int EN_RIGHT_DIRECTION = -1;
 
 // ------------------END Global Constants Configuration----------------------
 // -----------------BEGIN Keymap Configuration------------------
@@ -67,64 +69,71 @@ bool approxEq(const float a, const float b, const float tolerance)
 
 void moveLeftWheels(const int power)
 {
-	motor[front_left] = power;
-	motor[back_left] = power;
+	motor[left_base] = power;
 }
 
 void moveRightWheels(const int power)
 {
-	motor[front_right] = power;
-	motor[back_right] = power;
+	motor[right_base] = power;
+
 }
 
 void mobileGoalUp()
 {
-	motor[mb] = MB_POWER;
+	motor[mg] = MG_POWER;
 }
 
 
 void mobileGoalDown()
 {
-	motor[mb] = -MB_POWER;
+	motor[mg] = -MG_POWER;
 }
 
 void mobileGoalStop()
 {
-	motor[mb] = 0;
+	motor[mg] = 0;
 }
 
 void moveMobileGoal(const int power)
 {
-	motor[mb] = power;
+	motor[mg] = power;
 }
 
-void fourBarLeftUp()
+void liftLeftUp()
 {
-	motor[fb_left] = FOURBAR_POWER + FOURBAR_ANTIGRAVITY;
+	motor[left_lift_1] = LIFT_POWER + LIFT_ANTIGRAVITY;
+	motor[left_lift_2] = LIFT_POWER + LIFT_ANTIGRAVITY;
 }
 
-void fourBarRightUp()
+void liftRightUp()
 {
-	motor[fb_right] = FOURBAR_POWER + FOURBAR_ANTIGRAVITY -
-	7;
+	motor[right_lift_1] = LIFT_POWER + LIFT_ANTIGRAVITY;
+	motor[right_lift_2] = LIFT_POWER + LIFT_ANTIGRAVITY;
 }
 
-void fourBarMove(const int powerLeft, const int powerRight)
+void liftMove(const int powerLeft, const int powerRight)
 {
-	motor[fb_left] = powerLeft;
-	motor[fb_right] = powerRight;
+	motor[left_lift_1] = powerLeft;
+	motor[left_lift_2] = powerLeft;
+	motor[right_lift_1] = powerRight;
+	motor[right_lift_2] = powerRight;
+
 }
 
-void fourBarDown()
+void liftDown()
 {
-	motor[fb_left] = -FOURBAR_POWER + FOURBAR_ANTIGRAVITY;
-	motor[fb_right] = -FOURBAR_POWER + FOURBAR_ANTIGRAVITY+4;
+	motor[left_lift_1] = -LIFT_POWER + LIFT_ANTIGRAVITY;
+	motor[left_lift_2] = -LIFT_POWER + LIFT_ANTIGRAVITY;
+	motor[right_lift_1] = -LIFT_POWER + LIFT_ANTIGRAVITY;
+	motor[right_lift_2] = -LIFT_POWER + LIFT_ANTIGRAVITY;
 }
 
-void fourBarStop()
+void liftStop()
 {
-	motor[fb_left] = FOURBAR_ANTIGRAVITY;
-	motor[fb_right] = FOURBAR_ANTIGRAVITY;
+	motor[left_lift_1] = LIFT_ANTIGRAVITY;
+	motor[left_lift_2] = LIFT_ANTIGRAVITY;
+	motor[right_lift_1] = LIFT_ANTIGRAVITY;
+	motor[right_lift_2] = LIFT_ANTIGRAVITY;
 }
 
 void rollerIn()
@@ -152,29 +161,29 @@ void rollerZero()
 	motor[roller] = 0;
 }
 
-void chainBarUp()
+void fourBarUp()
 {
-	motor[chainbar_left] = CHAINBAR_POWER + CHAINBAR_ANTIGRAVITY;
-	motor[chainbar_right] = CHAINBAR_POWER + CHAINBAR_ANTIGRAVITY;
+	motor[fourbar_left] = FOURBAR_POWER + FOURBAR_ANTIGRAVITY;
+	motor[fourbar_right] = FOURBAR_POWER + FOURBAR_ANTIGRAVITY;
 
 }
 
-void chainBarMove(const int power)
+void fourBarMove(const int power)
 {
-	motor[chainbar_left] = power;
-	motor[chainbar_right] = power;
+	motor[fourbar_left] = power;
+	motor[fourbar_right] = power;
 }
 
-void chainBarDown()
+void fourBarDown()
 {
-	motor[chainbar_left] = -CHAINBAR_POWER + CHAINBAR_ANTIGRAVITY;
-	motor[chainbar_right] = -CHAINBAR_POWER + CHAINBAR_ANTIGRAVITY;
+	motor[fourbar_left] = -FOURBAR_POWER + FOURBAR_ANTIGRAVITY;
+	motor[fourbar_right] = -FOURBAR_POWER + FOURBAR_ANTIGRAVITY;
 }
 
-void chainBarStop()
+void fourBarStop()
 {
-	motor[chainbar_left] = CHAINBAR_ANTIGRAVITY;
-	motor[chainbar_right] = CHAINBAR_ANTIGRAVITY;
+	motor[fourbar_left] = FOURBAR_ANTIGRAVITY;
+	motor[fourbar_right] = FOURBAR_ANTIGRAVITY;
 }
 
 bool userIntervention(){
@@ -213,41 +222,54 @@ bool userIntervention(){
 	not approxEq(vexRT[Ch4Xmtr2],0,10);
 }
 
-int chainbarTarget = 0;
 int fourbarTarget = 0;
+int liftTarget = 0;
+bool isLiftLocked = false;
 bool isFourBarLocked = false;
-bool isChainBarLocked = false;
 
 
-task lockChainbar()
-{ // hold the chainbar in place. Call stoptask to release it
-#define currLoc (SensorValue[pot_chainbar]-POT_CHAINBAR_MIN)*POT_CHAINBAR_DIRECTION
+task lockFourbar()
+{ // hold the fourbar in place. Call stoptask to release it
+#define currLocLeft (SensorValue[pot_fourbar_left]-POT_FOURBAR_MIN)*POT_FOURBAR_DIRECTION
+#define currLocRight (SensorValue[pot_fourbar_right]-POT_FOURBAR_MIN)*POT_FOURBAR_DIRECTION
+
 	const float kp = 0.1; // proportional constant
 	const float ki = 0;
 	const float kd = 0; // derivatie constant
-	int lastErr, allErr, powerOutput = 0;
-	int err = 0;
+	int lastErrLeft, lastErrRight = 0;
+	int powerOutputLeft, powerOutputRight = 0;
+	int errLeft, errRight = 0;
 
 	for (ever)
 	{
-		err = chainbarTarget - currLoc;
-		powerOutput = CHAINBAR_ANTIGRAVITY + //Base power
-		err * kp + // Proportional
-		allErr * ki + (lastErr - err) * kd;
-		lastErr = err;
-		allErr += err;
-		chainBarMove(powerOutput);
+		errLeft = fourbarTarget - currLocLeft;
+		errRight = fourbarTarget - currLocRight;
+
+		powerOutputLeft = FOURBAR_ANTIGRAVITY + //Base power
+		errLeft * kp + // Proportional
+		(lastErrLeft - err) * kd;
+
+		powerOutputRight = FOURBAR_ANTIGRAVITY + //Base power
+		errRight * kp + // Proportional
+		(lastErrRight - err) * kd;
+		
+		
+		lastErrLeft = errLeft;
+		lastErrRight = errRight
+		
+		fourBarMove(powerOutputLeft, powerOutputRight);
 		abortTimeslice();
 	}
-#undef currLoc
+#undef currLocLeft
+#undef currLocRight
 }
 
 
-task lockFourBar()
-{ // hold the fourbar in place. Call stoptask to release it
+task lockLift()
+{ // hold the lift in place. Call stoptask to release it
 
-#define currLocLeft (SensorValue[pot_fourbar_left] - POT_FOURBAR_LEFT_MIN) * POT_FOURBAR_LEFT_DIRECTION
-#define currLocRight (SensorValue[pot_fourbar_right]-POT_FOURBAR_RIGHT_MIN) * POT_FOURBAR_RIGHT_DIRECTION
+#define currLocLeft (SensorValue[pot_lift_left] - POT_LIFT_LEFT_MIN) * POT_LIFT_LEFT_DIRECTION
+#define currLocRight (SensorValue[pot_lift_right]-POT_LIFT_RIGHT_MIN) * POT_LIFT_RIGHT_DIRECTION
 	const float kp = 0.25; // proportional constant
 	const float kd = 0; // derivatie constant
 	int lastErrLeft, lastErrRight = 0;
@@ -256,103 +278,107 @@ task lockFourBar()
 
 	for (ever)
 	{
-		//POT_MIN is the value when the fourbar is physically at its lowest location
-		errLeft = fourbarTarget - currLocLeft;
-		errRight = fourbarTarget - currLocRight;
+		//POT_MIN is the value when the lift is physically at its lowest location
+		errLeft = liftTarget - currLocLeft;
+		errRight = liftTarget - currLocRight;
 
-		powerOutputLeft = FOURBAR_ANTIGRAVITY + //Base power
+		powerOutputLeft = LIFT_ANTIGRAVITY + //Base power
 		errLeft * kp + // Proportional
 		(lastErrLeft - errLeft) * kd;
 
-		powerOutputRight = FOURBAR_ANTIGRAVITY + //Base power
+		powerOutputRight = LIFT_ANTIGRAVITY + //Base power
 		errRight * kp + // Proportional
 		(lastErrRight - errRight) * kd;
 
 		lastErrLeft = errLeft;
 		lastErrRight = errRight;
-		fourBarMove(powerOutputLeft, powerOutputRight);
+		liftMove(powerOutputLeft, powerOutputRight);
 		abortTimeslice();
 	}
 #undef currLocLeft
 #undef currLocRight
 }
 
-void releaseChainBar()
-{
-	isChainBarLocked = false;
-	stopTask(lockChainbar);
-}
-
 void releaseFourBar()
 {
 	isFourBarLocked = false;
-	stopTask(lockFourBar);
+	stopTask(lockFourbar);
 }
 
-
-void holdChainBar(const int target)
+void releaseLift()
 {
-	chainbarTarget = target;
-	if (isChainBarLocked)
-	{
-		stopTask(lockChainbar);
-	} else
-	{
-		isChainBarLocked = true;
-	}
-	startTask(lockChainbar);
-	return;
-
+	isLiftLocked = false;
+	stopTask(lockLift);
 }
 
-void holdChainBar(const int target, const float tolerance)
-{
-	chainbarTarget = target;
-#define currLoc SensorValue[pot_chainbar] - POT_CHAINBAR_MIN
-	if (isChainBarLocked)
-	{
-		stopTask(lockChainbar);
-	} else
-	{
-		isChainBarLocked = true;
-	}
-	startTask(lockChainbar);
-	while (!approxEq(target, currLoc, tolerance))
-	{
-		//blocks
-	}
-	return;
-#undef currLoc
-}
 
 void holdFourBar(const int target)
 {
 	fourbarTarget = target;
 	if (isFourBarLocked)
 	{
-		stopTask(lockFourBar);
+		stopTask(lockFourbar);
 	} else
 	{
 		isFourBarLocked = true;
 	}
-	startTask(lockFourBar);
+	startTask(lockFourbar);
 	return;
 
 }
 
 void holdFourBar(const int target, const float tolerance)
 {
-#define currLocLeft (SensorValue[pot_fourbar_left]-POT_FOURBAR_LEFT_MIN)*POT_FOURBAR_LEFT_DIRECTION
-#define currLocRight (SensorValue[pot_fourbar_right]-POT_FOURBAR_RIGHT_MIN)*POT_FOURBAR_RIGHT_DIRECTION
+#define currLocLeft SensorValue[pot_fourbar_left] - POT_FOURBAR_LEFT_MIN
+#define currLocRight SensorValue[pot_fourbar_right] - POT_FOURBAR_RIGHT_MIN
 	fourbarTarget = target;
 	if (isFourBarLocked)
 	{
-		stopTask(lockFourBar);
+		stopTask(lockFourbar);
 	} else
 	{
 		isFourBarLocked = true;
 	}
-	startTask(lockFourBar);
+	startTask(lockFourbar);
+	while (not(approxEq(target,currLocRight , tolerance) and approxEq(target,
+		currLocLeft,
+	tolerance)))
+	{
+		//blocks
+	};
+	return;
+#undef currLocLeft
+#undef currLocRight
+}
+
+void holdLift(const int target)
+{
+	liftTarget = target;
+	if (isLiftLocked)
+	{
+		stopTask(lockLift);
+	} else
+	{
+		isLiftLocked = true;
+	}
+	startTask(lockLift);
+	return;
+
+}
+
+void holdLift(const int target, const float tolerance)
+{
+#define currLocLeft (SensorValue[pot_lift_left]-POT_LIFT_LEFT_MIN)*POT_LIFT_LEFT_DIRECTION
+#define currLocRight (SensorValue[pot_lift_right]-POT_LIFT_RIGHT_MIN)*POT_LIFT_RIGHT_DIRECTION
+	liftTarget = target;
+	if (isLiftLocked)
+	{
+		stopTask(lockLift);
+	} else
+	{
+		isLiftLocked = true;
+	}
+	startTask(lockLift);
 	while (not(approxEq(target,currLocRight , tolerance) and approxEq(target,
 		currLocLeft,
 	tolerance)))
@@ -368,54 +394,54 @@ void readyForDroppingCone(const int count){
 	switch (count)
 			{
 			case 0:
-				holdFourBar(50);
-				holdChainBar(2850);
+				holdLift(50);
+				holdFourBar(2850);
 				break;
 			case 1:
-				holdFourBar(50);
-				holdChainBar(2850);
+				holdLift(50);
+				holdFourBar(2850);
 				break;
 			case 2:
-				holdFourBar(100);
-				holdChainBar(2850);
+				holdLift(100);
+				holdFourBar(2850);
 				break;
 			case 3:
-				holdFourBar(230);
-				holdChainBar(2850);
+				holdLift(230);
+				holdFourBar(2850);
 				break;
 			case 4:
-				holdChainBar(1450, 50);
-				holdChainBar(2850);
-				holdFourBar(300);
+				holdFourBar(1450, 50);
+				holdFourBar(2850);
+				holdLift(300);
 				break;
 			case 5:
-				holdChainBar(1450, 50);
-				holdFourBar(425);
-				holdChainBar(2850);
+				holdFourBar(1450, 50);
+				holdLift(425);
+				holdFourBar(2850);
 
 				break;
 			case 6:
-				holdChainBar(1450, 50);
-				holdFourBar(515);
-				holdChainBar(2850);
+				holdFourBar(1450, 50);
+				holdLift(515);
+				holdFourBar(2850);
 
 				break;
 			case 7:
-				holdChainBar(1450, 50);
-				holdFourBar(600);
-				holdChainBar(2850);
+				holdFourBar(1450, 50);
+				holdLift(600);
+				holdFourBar(2850);
 
 				break;
 			case 8:
-				holdChainBar(1450, 50);
-				holdFourBar(700);
-				holdChainBar(2850);
+				holdFourBar(1450, 50);
+				holdLift(700);
+				holdFourBar(2850);
 
 				break;
 			case 9:
-				holdChainBar(1450, 50);
-				holdFourBar(900);
-				holdChainBar(2850);
+				holdFourBar(1450, 50);
+				holdLift(900);
+				holdFourBar(2850);
 				break;
 			}
 		}
@@ -456,22 +482,22 @@ task MobileGoalControls()
 
 }
 
-task FourBarControls()
+task LiftControls()
 {
 	for (ever)
 	{
-		while (ButtonFourbarUp)
+		while (ButtonLiftUp)
 		{
-			if (isFourBarLocked) releaseFourBar();
-			fourBarLeftUp();
-			fourBarRightUp();
+			if (isLiftLocked) releaseLift();
+			liftLeftUp();
+			liftRightUp();
 		}
-		while (ButtonFourbarDown)
+		while (ButtonLiftDown)
 		{
-			if (isFourBarLocked) releaseFourBar();
-			fourBarDown();
+			if (isLiftLocked) releaseLift();
+			liftDown();
 		}
-		if (!isFourBarLocked) fourBarStop();
+		if (!isLiftLocked) liftStop();
 		abortTimeslice();
 	}
 }
@@ -500,28 +526,23 @@ task RollerControls()
 	}
 }
 
-task ChainBarControls()
+task FourBarControls()
 {
 	for (ever)
 	{
 
-		while (ButtonChainBarUp)
+		while (ButtonFourBarUp)
 		{
-			if (isChainBarLocked) releaseChainBar();
-				chainBarUp();
+			if (isFourBarLocked) releaseFourBar();
+				fourBarUp();
 		}
-		while (ButtonChainBarDown)
+		while (ButtonFourBarDown)
 		{
-			if (isChainBarLocked) releaseChainBar();
-			chainBarDown();
+			if (isFourBarLocked) releaseFourBar();
+			fourBarDown();
 		}
 
-		if (!isChainBarLocked)
-		{
-			chainBarStop();
-
-
-		}
+		if (!isFourBarLocked) fourBarStop();
 		abortTimeslice();
 	}
 }
@@ -536,18 +557,18 @@ task SpecialControls()
 	{
 		if (ButtonSpecialPickUp) //aka flat
 		{
-			holdChainBar(1400);
+			holdFourBar(1400);
 		}
 #ifdef ButtonSpecialDropOffLow
 		if (ButtonSpecialDropOffLow)
 		{
-			holdChainBar(750);
+			holdFourBar(750);
 		}
 #endif
 #ifdef ButtonSpecialDropOffHigh
 		if (ButtonSpecialDropOffHigh)
 		{
-			holdChainBar(2850);
+			holdFourBar(2850);
 		}
 #endif
 

@@ -17,8 +17,8 @@
 
 
 
-#define ButtonFourbarUp vexRT[Btn6UXmtr2]
-#define ButtonFourbarDown vexRT[Btn6DXmtr2]
+#define ButtonLiftUp vexRT[Btn6UXmtr2]
+#define ButtonLiftDown vexRT[Btn6DXmtr2]
 
 #define ButtonChainBarUp vexRT[Btn7UXmtr2]
 #define ButtonChainBarDown vexRT[Btn7LXmtr2]

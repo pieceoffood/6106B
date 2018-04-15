@@ -5,9 +5,9 @@
 startTask (SpecialControls);
 startTask (WheelControls);
 startTask (MobileGoalControls);
-startTask (FourBarControls);
+startTask (LiftControls);
 startTask (RollerControls);
-startTask (ChainBarControls);
+startTask (FourBarControls);
 
 while (true)
 {
