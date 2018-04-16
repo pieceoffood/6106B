@@ -3,7 +3,7 @@ motor[roller]=ROLLER_POWER;
 
 
 mg_out(false);
-outOfSize(500,1805);
+//outOfSize(500,1805);
 wait1Msec(500);
 moveWheels(49.5,true,2.2);
 wait1Msec(500);

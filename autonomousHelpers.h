@@ -90,7 +90,7 @@ task tMoveWheels()
 	resetEncoders();
 	if (correctDirection) { if (shouldResetGyro) resetGyro(); }
 
-	long long sumLeft = 0, sumRight = 0;
+	long sumLeft = 0, sumRight = 0;
 	float kp = 1; // proportional constant
 	const float ki = 0;//0.000025;
 	const float kd = -15; // derivatie constant
@@ -101,9 +101,9 @@ task tMoveWheels()
 	for(ever)
 	{
 		wait1Msec(25);
-		kp=0.52-(nImmediateBatteryLevel/1000-7)/4;
-		errLeft = distance * ticksPerInches - currLocLeft * EN_FRONT_LEFT_DIRECTION;
-		errRight = distance * ticksPerInches - currLocRight * EN_FRONT_RIGHT_DIRECTION;
+		kp=0.52/*-(nImmediateBatteryLevel/1000-7)/4*/;
+		errLeft = distance * ticksPerInches - currLocLeft * EN_LEFT_DIRECTION;
+		errRight = distance * ticksPerInches - currLocRight * EN_RIGHT_DIRECTION;
 		sumLeft += errLeft*dt;
 		sumRight += errRight*dt;
 		dt=nSysTime-lastMeasure;

@@ -7,10 +7,10 @@
 #define ButtonLiftUp vexRT[Btn6U]
 #define ButtonLiftDown vexRT[Btn6D]
 
-#define ButtonChainBarUp vexRT[Btn7U]
-#define ButtonChainBarDown vexRT[Btn7L]
-#define ButtonSpecialPickUp vexRT[Btn7R]
-#define ButtonSpecialDropOffAdapt vexRT[Btn7D]
+#define ButtonFourBarUp vexRT[Btn7U]
+#define ButtonFourBarDown vexRT[Btn7L]
+//#define ButtonSpecialPickUp vexRT[Btn7R]
+//#define ButtonSpecialDropOffAdapt vexRT[Btn7D]
 
 #define ButtonRollerIn vexRT[Btn8U]
 #define ButtonRollerOut vexRT[Btn8R]

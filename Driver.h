@@ -15,11 +15,11 @@ const int ROLLER_ANTIGRAVITY = 25;
 
 //POT_MIN is the value when the lift is physically at its physical lowest location. MIN may be larger than MAX in value.
 //POT_DIRECTION can be either -1 or 1. 1 if the potentiometer reading increase when the structure moves up, -1 otherwise
-const int POT_FOURBAR_LEFT_MIN = 1200; 
+const int POT_FOURBAR_LEFT_MIN = 1200;
 const int POT_FOURBAR_LEFT_MAX = 4095;
 const int POT_FOURBAR_LEFT_DIRECTION=1;
 
-const int POT_FOURBAR_RIGHT_MIN = 1200; 
+const int POT_FOURBAR_RIGHT_MIN = 1200;
 const int POT_FOURBAR_RIGHT_MAX = 4095;
 const int POT_FOURBAR_RIGHT_DIRECTION=1;
 
@@ -27,7 +27,7 @@ const int POT_LIFT_LEFT_DIRECTION = 1;
 const int POT_LIFT_LEFT_MAX = 3882;
 const int POT_LIFT_LEFT_MIN = 2150;
 
-const int POT_LIFT_RIGHT_DIRECTION = 1; 
+const int POT_LIFT_RIGHT_DIRECTION = 1;
 const int POT_LIFT_RIGHT_MAX = 3703;
 const int POT_LIFT_RIGHT_MIN = 2060;
 
@@ -38,14 +38,14 @@ const int RIGHT_DIRECTION = 1;
 const int LEFT_DIRECTION = 1;
 
 
-const int EN_LEFT_DIRECTION = -1;
-const int EN_RIGHT_DIRECTION = -1;
+const int EN_LEFT_DIRECTION = 1;
+const int EN_RIGHT_DIRECTION = 1;
 
 // ------------------END Global Constants Configuration----------------------
 // -----------------BEGIN Keymap Configuration------------------
 
 //#include "KeymapSinglePlayer.h"
-#include "KeymapTwoPlayer.h"
+#include "KeymapSinglePlayer.h"
 
 // -----------------END Keymap Configuration----------------
 // ------------------BEGIN Utility Functons---------------
@@ -163,27 +163,27 @@ void rollerZero()
 
 void fourBarUp()
 {
-	motor[fourbar_left] = FOURBAR_POWER + FOURBAR_ANTIGRAVITY;
-	motor[fourbar_right] = FOURBAR_POWER + FOURBAR_ANTIGRAVITY;
+	motor[left_fourbar] = FOURBAR_POWER + FOURBAR_ANTIGRAVITY;
+	motor[right_fourbar] = FOURBAR_POWER + FOURBAR_ANTIGRAVITY;
 
 }
 
-void fourBarMove(const int power)
+void fourBarMove(const int powerLeft, const int powerRight)
 {
-	motor[fourbar_left] = power;
-	motor[fourbar_right] = power;
+	motor[left_fourbar] = powerLeft;
+	motor[right_fourbar] = powerRight;
 }
 
 void fourBarDown()
 {
-	motor[fourbar_left] = -FOURBAR_POWER + FOURBAR_ANTIGRAVITY;
-	motor[fourbar_right] = -FOURBAR_POWER + FOURBAR_ANTIGRAVITY;
+	motor[left_fourbar] = -FOURBAR_POWER + FOURBAR_ANTIGRAVITY;
+	motor[right_fourbar] = -FOURBAR_POWER + FOURBAR_ANTIGRAVITY;
 }
 
 void fourBarStop()
 {
-	motor[fourbar_left] = FOURBAR_ANTIGRAVITY;
-	motor[fourbar_right] = FOURBAR_ANTIGRAVITY;
+	motor[left_fourbar] = FOURBAR_ANTIGRAVITY;
+	motor[right_fourbar] = FOURBAR_ANTIGRAVITY;
 }
 
 bool userIntervention(){
@@ -230,8 +230,8 @@ bool isFourBarLocked = false;
 
 task lockFourbar()
 { // hold the fourbar in place. Call stoptask to release it
-#define currLocLeft (SensorValue[pot_fourbar_left]-POT_FOURBAR_MIN)*POT_FOURBAR_DIRECTION
-#define currLocRight (SensorValue[pot_fourbar_right]-POT_FOURBAR_MIN)*POT_FOURBAR_DIRECTION
+#define currLocLeft (SensorValue[pot_fourbar_left]-POT_FOURBAR_LEFT_MIN)*POT_FOURBAR_LEFT_DIRECTION
+#define currLocRight (SensorValue[pot_fourbar_right]-POT_FOURBAR_RIGHT_MIN)*POT_FOURBAR_RIGHT_DIRECTION
 
 	const float kp = 0.1; // proportional constant
 	const float ki = 0;
@@ -247,16 +247,16 @@ task lockFourbar()
 
 		powerOutputLeft = FOURBAR_ANTIGRAVITY + //Base power
 		errLeft * kp + // Proportional
-		(lastErrLeft - err) * kd;
+		(lastErrLeft - errLeft) * kd;
 
 		powerOutputRight = FOURBAR_ANTIGRAVITY + //Base power
 		errRight * kp + // Proportional
-		(lastErrRight - err) * kd;
-		
-		
+		(lastErrRight - errRight) * kd;
+
+
 		lastErrLeft = errLeft;
-		lastErrRight = errRight
-		
+		lastErrRight = errRight;
+
 		fourBarMove(powerOutputLeft, powerOutputRight);
 		abortTimeslice();
 	}
@@ -549,7 +549,7 @@ task FourBarControls()
 
 int coneCount = 0;
 
-task SpecialControls()
+/*task SpecialControls()
 {
 	bool wasPressedIncrement = false;
 	bool wasPressedDecrement = false;
@@ -616,6 +616,6 @@ task SpecialControls()
 		abortTimeslice();
 	}
 }
-
+*/
 
 #endif
