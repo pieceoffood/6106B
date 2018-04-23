@@ -18,4 +18,6 @@
 #define AxisLeftWheels vexRT[Ch3]
 #define AxisRightWheels vexRT[Ch2]
 
+#define ButtonLockWheels vexRT[Btn8D]
+
 #endif

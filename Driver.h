@@ -5,34 +5,35 @@
 
 // -----------------BEGIN Global Constants Configuration-------------------
 const int MG_POWER = 127; // power to mobile goal lift
-const int LIFT_POWER = 127; //power to lift
+const int LIFT_POWER = 120; //power to lift
 const int FOURBAR_POWER = 127; // power to fourbar
-const int ROLLER_POWER = 100; // power to roller
-const int LIFT_ANTIGRAVITY = 10; //power to lift when it is in the "stop" position
+const int ROLLER_POWER = 127; // power to roller
+const int LIFT_ANTIGRAVITY = 0; //power to lift when it is in the "stop" position
 const int MG_ANTIGRAVITY = 0; //power to mobile goal lift when it is in the "stop" position
 const int FOURBAR_ANTIGRAVITY = 0;
 const int ROLLER_ANTIGRAVITY = 25;
 
 //POT_MIN is the value when the lift is physically at its physical lowest location. MIN may be larger than MAX in value.
 //POT_DIRECTION can be either -1 or 1. 1 if the potentiometer reading increase when the structure moves up, -1 otherwise
-const int POT_FOURBAR_LEFT_MIN = 1200;
-const int POT_FOURBAR_LEFT_MAX = 4095;
-const int POT_FOURBAR_LEFT_DIRECTION=1;
+const int POT_FOURBAR_LEFT_MIN = 4095;
+const int POT_FOURBAR_LEFT_MAX = 1830;
+const int POT_FOURBAR_LEFT_DIRECTION=-1;
 
-const int POT_FOURBAR_RIGHT_MIN = 1200;
-const int POT_FOURBAR_RIGHT_MAX = 4095;
+const int POT_FOURBAR_RIGHT_MIN = 1245;
+const int POT_FOURBAR_RIGHT_MAX = 3633;
 const int POT_FOURBAR_RIGHT_DIRECTION=1;
 
-const int POT_LIFT_LEFT_DIRECTION = 1;
-const int POT_LIFT_LEFT_MAX = 3882;
-const int POT_LIFT_LEFT_MIN = 2150;
+const int POT_LIFT_LEFT_DIRECTION = -1;
+const int POT_LIFT_LEFT_MAX = 178;
+const int POT_LIFT_LEFT_MIN = 1756;
 
-const int POT_LIFT_RIGHT_DIRECTION = 1;
-const int POT_LIFT_RIGHT_MAX = 3703;
-const int POT_LIFT_RIGHT_MIN = 2060;
+const int POT_LIFT_RIGHT_DIRECTION = -1;
+const int POT_LIFT_RIGHT_MAX = 1640;
+const int POT_LIFT_RIGHT_MIN = 50;
 
-const int MG_MIN = 883;
-const int MG_MAX = 3260;
+const int MG_MIN = 3200;
+const int MG_MAX = 1216;
+const int MG_DIRECTION=-1;
 
 const int RIGHT_DIRECTION = 1;
 const int LEFT_DIRECTION = 1;
@@ -44,8 +45,8 @@ const int EN_RIGHT_DIRECTION = 1;
 // ------------------END Global Constants Configuration----------------------
 // -----------------BEGIN Keymap Configuration------------------
 
-//#include "KeymapSinglePlayer.h"
 #include "KeymapSinglePlayer.h"
+//#include "KeymapTwoPlayer.h"
 
 // -----------------END Keymap Configuration----------------
 // ------------------BEGIN Utility Functons---------------
@@ -305,6 +306,7 @@ void releaseFourBar()
 	stopTask(lockFourbar);
 }
 
+
 void releaseLift()
 {
 	isLiftLocked = false;
@@ -446,6 +448,40 @@ void readyForDroppingCone(const int count){
 			}
 		}
 
+task tLockWheels(){
+#define currLocLeft SensorValue[en_left_base]
+#define currLocRight SensorValue[en_right_base]
+const int targetLeft=currLocLeft;
+const int targetRight=currLocRight;
+const float kp=2;
+int powerLeft,powerRight;
+for(ever){
+	if (not approxEq(currLocLeft,targetLeft,2)){
+		powerLeft=(targetLeft-currLocLeft)*kp;
+	} else {
+		powerLeft=0;
+	}
+		if (not approxEq(currLocRight,targetRight,2)){
+		powerRight=(targetRight-currLocRight)*kp;
+	} else {
+		powerRight=0;
+	}
+	moveLeftWheels(powerLeft);
+	moveRightWheels(powerRight);
+	abortTimeslice();
+}
+
+
+#undef currLocLeft
+#undef currLocRight
+}
+
+void lockWheels(){
+	startTask(tLockWheels);
+	while (approxEq(AxisLeftWheels,0,25) and approxEq(AxisRightWheels,0,25)){}
+	stopTask(tLockWheels);
+}
+
 //----------------END Utility Functions------------
 
 task WheelControls()
@@ -454,6 +490,12 @@ task WheelControls()
 	{
 		moveLeftWheels(min(120,AxisLeftWheels));
 		moveRightWheels(min(120,AxisRightWheels));
+#ifdef ButtonLockWheels
+		if (ButtonLockWheels){
+			lockWheels();
+		}
+#endif
+
 		abortTimeslice();
 
 	}

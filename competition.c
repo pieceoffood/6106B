@@ -1,12 +1,13 @@
 #pragma config(UART_Usage, UART1, uartVEXLCD, baudRate19200, IOPins, None, None)
 #pragma config(UART_Usage, UART2, uartNotUsed, baudRate4800, IOPins, None, None)
 #pragma config(Sensor, in1,    pot_lift_left,  sensorPotentiometer)
-#pragma config(Sensor, in2,    pot_lift_right, sensorPotentiometer)
-#pragma config(Sensor, in3,    pot_fourbar_left, sensorPotentiometer)
+#pragma config(Sensor, in2,    pot_fourbar_left, sensorPotentiometer)
+#pragma config(Sensor, in3,    pot_lift_right, sensorPotentiometer)
 #pragma config(Sensor, in4,    pot_fourbar_right, sensorPotentiometer)
 #pragma config(Sensor, in5,    pot_mg,         sensorPotentiometer)
 #pragma config(Sensor, in6,    gyro_right,     sensorGyro)
 #pragma config(Sensor, in7,    gyro_left,      sensorGyro)
+#pragma config(Sensor, in8,    acc,            sensorNone)
 #pragma config(Sensor, dgtl1,  en_left_base,   sensorQuadEncoder)
 #pragma config(Sensor, dgtl3,  en_right_base,  sensorQuadEncoder)
 #pragma config(Motor,  port1,           mg,            tmotorVex393_HBridge, openLoop)
@@ -35,7 +36,7 @@
 
 int autonSel=0;
 const int nAutons=7;
-const string autonNames[7]={"Left 20 Points","Right 20 Points","Left 10 Points","Right 10 Points","Left 5 Points ","Right 5 Points ","Skill Challenge"};
+const string autonNames[nAutons]={"Left 20 Points","Right 20 Points","Left 10 Points","Right 10 Points","Left 5 Points ","Right 5 Points ","Skill Challenge"};
 
 
 void pre_auton() {
