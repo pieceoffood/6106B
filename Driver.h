@@ -15,8 +15,8 @@ const int ROLLER_ANTIGRAVITY = 25;
 
 //POT_MIN is the value when the lift is physically at its physical lowest location. MIN may be larger than MAX in value.
 //POT_DIRECTION can be either -1 or 1. 1 if the potentiometer reading increase when the structure moves up, -1 otherwise
-const int POT_FOURBAR_LEFT_MIN = 4095;
-const int POT_FOURBAR_LEFT_MAX = 1830;
+const int POT_FOURBAR_LEFT_MIN = 3980;
+const int POT_FOURBAR_LEFT_MAX = 1160;
 const int POT_FOURBAR_LEFT_DIRECTION=-1;
 
 const int POT_FOURBAR_RIGHT_MIN = 1245;
@@ -24,12 +24,12 @@ const int POT_FOURBAR_RIGHT_MAX = 3633;
 const int POT_FOURBAR_RIGHT_DIRECTION=1;
 
 const int POT_LIFT_LEFT_DIRECTION = -1;
-const int POT_LIFT_LEFT_MAX = 178;
-const int POT_LIFT_LEFT_MIN = 1756;
+const int POT_LIFT_LEFT_MAX = 0;
+const int POT_LIFT_LEFT_MIN = 1810;
 
 const int POT_LIFT_RIGHT_DIRECTION = -1;
-const int POT_LIFT_RIGHT_MAX = 1640;
-const int POT_LIFT_RIGHT_MIN = 50;
+const int POT_LIFT_RIGHT_MAX = 0;
+const int POT_LIFT_RIGHT_MIN = 1765;
 
 const int MG_MIN = 3200;
 const int MG_MAX = 1216;
@@ -234,7 +234,7 @@ task lockFourbar()
 #define currLocLeft (SensorValue[pot_fourbar_left]-POT_FOURBAR_LEFT_MIN)*POT_FOURBAR_LEFT_DIRECTION
 #define currLocRight (SensorValue[pot_fourbar_right]-POT_FOURBAR_RIGHT_MIN)*POT_FOURBAR_RIGHT_DIRECTION
 
-	const float kp = 0.1; // proportional constant
+	const float kp = 5; // proportional constant
 	const float ki = 0;
 	const float kd = 0; // derivatie constant
 	int lastErrLeft, lastErrRight = 0;

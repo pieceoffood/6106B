@@ -9,10 +9,11 @@
 #define ButtonMobileGoalUp vexRT[Btn5U]
 #define ButtonMobileGoalDown vexRT[Btn5D]
 
-#define ButtonConeCountIncrement vexRT[Btn8R]
-#define ButtonConeCountDecrement vexRT[Btn8D]
-#define ButtonConeCountReset vexRT[Btn8L]
+//#define ButtonConeCountIncrement vexRT[Btn8R]
+//#define ButtonConeCountDecrement vexRT[Btn8D]
+//#define ButtonConeCountReset vexRT[Btn8L]
 
+#define ButtonLockWheels vexRT[Btn8D]
 //----------------Second Player-------------
 
 

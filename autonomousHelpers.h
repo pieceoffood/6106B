@@ -237,7 +237,7 @@ void mobileGoal(const int target, bool block = false, int tolerance = 30, int de
 }
 
 void mg_in(bool block, int delay=0){
-	mobileGoal(1250,block,60,delay);
+	mobileGoal(1360,block,60,delay);
 }
 
 void mg_mid(bool block, int delay=0){
@@ -276,11 +276,11 @@ task tFourbarDown(){
 	motor[right_fourbar]=0;
 }
 
-void FourbarUp(){
+void fourbarUp(){
 	startTask(tFourbarUp);
 }
 
-void FourbarUp(bool block){
+void fourbarUp(bool block){
 	if (block){
 		while (not approxEq(SensorValue[pot_fourbar_left],POT_FOURBAR_LEFT_MAX,75) and not approxEq(SensorValue[pot_fourbar_right],POT_FOURBAR_RIGHT_MAX,75)){}
 	} else { return;}
