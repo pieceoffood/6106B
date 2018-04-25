@@ -247,6 +247,7 @@ void mg_mid(bool block, int delay=0){
 void mg_out(bool block, int delay=0){
 	mobileGoal(3150,block,80,delay);
 }
+
 /*
 void outOfSize(int fourBar, int chainBar){
 	holdFourBar(fourBar);
@@ -256,17 +257,17 @@ void outOfSize(int fourBar, int chainBar){
 	holdChainBar(chainBar);
 }*/
 
-task tFourbarUp(){
+task tFourbarTop(){
 	while (not approxEq(SensorValue[pot_fourbar_left],POT_FOURBAR_LEFT_MAX,75) and not approxEq(SensorValue[pot_fourbar_right],POT_FOURBAR_RIGHT_MAX,75))
 	{
-		motor[left_fourbar]=100;
-		motor[right_fourbar]=100;
+		motor[left_fourbar]=127;
+		motor[right_fourbar]=127;
 	}
 	motor[left_fourbar]=0;
 	motor[right_fourbar]=0;
 }
 
-task tFourbarDown(){
+task tFourbarBottom(){
 	while (not approxEq(SensorValue[pot_fourbar_left],POT_FOURBAR_LEFT_MIN,75) and not approxEq(SensorValue[pot_fourbar_right],POT_FOURBAR_RIGHT_MIN,75))
 	{
 		motor[left_fourbar]=-100;
@@ -276,23 +277,36 @@ task tFourbarDown(){
 	motor[right_fourbar]=0;
 }
 
-void fourbarUp(){
-	startTask(tFourbarUp);
+void fourbarTop(){
+	releaseFourBar();
+	startTask(tFourbarTop);
 }
 
-void fourbarUp(bool block){
+void fourbarTop(bool block){
+	releaseFourBar();
+	startTask(tFourbarTop);
 	if (block){
 		while (not approxEq(SensorValue[pot_fourbar_left],POT_FOURBAR_LEFT_MAX,75) and not approxEq(SensorValue[pot_fourbar_right],POT_FOURBAR_RIGHT_MAX,75)){}
 	} else { return;}
 }
 
-void fourbarDown(){
-	startTask(tFourbarDown);
+void fourbarBottom(){
+	releaseFourBar();
+	startTask(tFourbarBottom);
 }
 
-void fourbarDown(bool block){
-	startTask(tFourbarDown);
+void fourbarBottom(bool block){
+	releaseFourBar();
+	startTask(tFourbarBottom);
 	if (block){
 while (not approxEq(SensorValue[pot_fourbar_left],POT_FOURBAR_LEFT_MIN,75) and not approxEq(SensorValue[pot_fourbar_right],POT_FOURBAR_RIGHT_MIN,75)){}
 }}
+
+void releaseFourBar()
+{
+	isFourBarLocked = false;
+	stopTask(lockFourbar);
+	stopTask(tFourbarTop);
+	stopTask(tFourbarBottom);
+}
 #endif

@@ -29,7 +29,7 @@ const int POT_LIFT_LEFT_MIN = 1810;
 
 const int POT_LIFT_RIGHT_DIRECTION = -1;
 const int POT_LIFT_RIGHT_MAX = 0;
-const int POT_LIFT_RIGHT_MIN = 1765;
+const int POT_LIFT_RIGHT_MIN = 1065;
 
 const int MG_MIN = 3200;
 const int MG_MAX = 1216;
@@ -300,11 +300,7 @@ task lockLift()
 #undef currLocRight
 }
 
-void releaseFourBar()
-{
-	isFourBarLocked = false;
-	stopTask(lockFourbar);
-}
+void releaseFourBar();
 
 
 void releaseLift()
